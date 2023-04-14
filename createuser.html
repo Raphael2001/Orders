@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="he_IL" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link href="vendor/css/material-dashboard.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="vendor/css/style.css" type="text/css">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+
+    <title>יצירת משתמש</title>
+
+
+</head>
+<div id="loader-wrapper">
+    <div id="loader"></div>
+
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+
+</div>
+
+<body id="myusers">
+    <div id="lock-modal"></div>
+    <div id="loading-circle"></div>
+    <div class="wrapper ">
+        <div id="sidebar" class="sidebar" data-color="green">
+        </div>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+
+            </nav> <!-- End Navbar -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="wrapper">
+
+                        <h3 class="heading" style="margin-bottom: 50px;">יצירת משתמש חדש</h3>
+
+                        <div class="forms-container createuser">
+                            <div class="form">
+
+
+                                <!-- <h1 class="form__header">יצירת משתמש חדש</h1> -->
+                                <form onsubmit="addusertocompany()" id="form_create_user">
+
+
+                                    <div class="form-row">
+                                        <div class="col-md-6 input-field ">
+                                            <input type="email" class="form-control user usermail" id="user-mail"
+                                                placeholder="מייל" required>
+
+                                        </div>
+                                        <div class="col-md-6 input-field ">
+                                            <!-- <input type="password" class="form-control user userpassword"
+                                                id="user-password" placeholder="סיסמא" required> -->
+
+
+                                            <input type="password" id="user-password" name=" psw" placeholder="סיסמא"
+                                                class="form-control user userpassword"
+                                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required
+                                                autocomplete="new-password">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row ">
+                                        <div class="col-md-6">
+                                            <div class="input-field">
+                                                <input type="text" class="form-control user userfullname"
+                                                    id="user-fullname" placeholder="שם מלא" required>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-field select-role">
+                                                <select list="role" class="form-control user userrole" name="role"
+                                                    id="user-role" required>
+                                                    <datalist id="role">
+                                                        <option value="" disabled selected hidden>תפקיד</option>
+                                                        <option id="admin" value="admin"> admin</option>
+
+
+                                                    </datalist>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <button type="submit" class="btn btn-create-user">צור משתמש חדש</button>
+
+
+
+
+
+                                    <div id="message">
+                                        <h3>הסיסמא חייבת להכיל את הבאים:</h3>
+                                        <p id="letter" class="invalid"> אות קטנה באנגלית</p>
+                                        <p id="capital" class="invalid"> אות גדולה באנגלית</p>
+                                        <p id="number" class="invalid"> מספר</p>
+                                        <p id="length" class="invalid"> לפחות 8 תווים</p>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="modaluser" class=" modal-small-wrapper modaluser">
+
+                <!-- Modal content -->
+                <div class="modal-small ">
+                    <span class="close" onclick="closepopup('modaluser')">&times;</span>
+                    <p>משתמש חדש נוצר</p>
+                    <p>מייל: <span id="modal-usermail"></span></p>
+                    <p>סיסמא: <span id="modal-userpassword"></span></p>
+                    <button class="btn" onclick='window.open("myusers.html", "_self");'>אישור</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/js/popper.min.js"></script>
+    <script src="vendor/js/material-dashboard.js"></script>
+    <script src="vendor/js/bootstrap-material-design.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/app.js"></script>
+    <script>
+        window.onload = checkuser();
+
+        analytics.logEvent('A new Entry in Create User page');
+        const form_create = document.getElementById("form_create_user");
+        form_create.addEventListener("submit", (e) => {
+            e.preventDefault();
+        });
+        // var span = document.getElementsByClassName("close")[0];
+        // span.onclick = function () {
+        //     document.getElementById("modaluser").style.display = "none";
+        // }
+
+
+        var password = document.getElementById("user-password");
+        passwordvalidation(password);
+
+    </script>
+
+</body>
+
+</html>

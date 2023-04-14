@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="he_IL" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+    <!-- CSS only -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous"> -->
+    <link rel="stylesheet" type="text/css" href="vendor/css/trackpage.css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+
+    <title> עקוב אחרי משלוח</title>
+</head>
+
+<body id="body">
+
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <header class="container-fluid">
+        <div class="container text-center" id="searchBox">
+            <h1>עקוב אחרי המשלוח שלי</h1>
+
+            <div class="form col-xs-12">
+                <input class="col-xs-9" id="searchBar" type="text" placeholder="חפש" autofocus />
+                <i class="fas fa-search-location" id="search"></i>
+
+            </div>
+        </div>
+    </header>
+    <div id="result"></div>
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js.map"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/app.js"></script>
+    <script>
+        analytics.logEvent('A new Entry in Track My Package page');
+
+        document.body.style = "overflow: hidden";
+
+        $(document).ready(function () {
+
+
+            var keyword = "";
+            var searchBar = $("#searchBar");
+            var searchButton = $("#search");
+            var result = $("#result");
+            var orderno = getKeyWordFromQuery("ordernum");
+
+            searchBar.val(orderno);
+
+
+
+            searchButton.click(function () {
+                document.body.style = "overflow: scroll";
+
+                keyword = searchBar.val().toUpperCase();
+                result.empty();
+                // $("footer").empty();
+                //   displayResults(); 
+                createPageTrack(keyword)
+                $("#searchBox").animate({ 'padding-top': "30px" }, 600);
+                $(".container-fluid").animate({ height: "40vh" }, 600);
+
+            });
+
+            if (searchBar.val() != "") {
+                searchButton.click();
+            }
+
+            searchBar.keypress(function (e) {
+                if (e.keyCode == 13)
+                    $(searchButton).click();
+            });
+
+
+        });
+    </script>
+
+</body>
+
+</html>

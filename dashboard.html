@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="he_IL" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link href="vendor/css/material-dashboard.css" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+    <link rel="stylesheet" href="vendor/css/style.css" type="text/css">
+
+    <title>לוח בקרה</title>
+    <style>
+        .chart {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            background: "#fdfdff",
+        }
+    </style>
+
+
+</head>
+<div id="loader-wrapper">
+    <div id="loader"></div>
+
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+
+</div>
+<div id="lock-modal"></div>
+<div id="loading-circle"></div>
+
+<body id="dashboard">
+    <div class="wrapper ">
+        <div id="sidebar" class="sidebar" data-color="green">
+        </div>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+
+            </nav> <!-- End Navbar -->
+            <br>
+            <br><br>
+            <h3 class="heading" style="margin-right: 5px; margin-bottom:0px; ">לוחות בקרה</h3>
+
+
+
+            <div class="content">
+
+                <div class="container-fluid">
+
+                    <div class="wrapper">
+
+
+                        <div class="container">
+
+                            <div class="row charts-number">
+
+                                <div class="col">
+                                    <div class="chart" id="chartmonthly"></div>
+
+                                </div>
+                                <div class="col">
+                                    <div class="chart" id="chartdaily"></div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="chart" id="chartcitymonthly"></div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="chart" id="chartdistributormonthly"></div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="chart" id="chartcountshipmentmonthly"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="chart" id="chartcountshipmentdistributormonthly"></div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://unpkg.com/@mongodb-js/charts-embed-dom"></script>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/js/popper.min.js"></script>
+    <script src="vendor/js/material-dashboard.js"></script>
+    <script src="vendor/js/bootstrap-material-design.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/app.js"></script>
+    <script>
+
+        window.onload = checkuser();
+
+        analytics.logEvent('A new Entry in Dashboard page');
+        var CompanyId = Number(getCompanyID());
+
+
+        const ChartsEmbedSDK = window.ChartsEmbedSDK;
+        function getFilterdates() {
+            return { "CompanyID": CompanyId, 'ShipmentInfo.CreateDate': { "$gte": firstDay, "$lte": lastDay } };
+        }
+        const sdk = new ChartsEmbedSDK({
+            baseUrl: "https://charts.mongodb.com/charts-shipping-360-ikfsk"
+        });
+
+        const chartmonthly = new Chart("6fff9a20-65f6-4bf9-8161-450985c83321", "120px", getFilterdates(), "chartmonthly")
+        chartmonthly.render(sdk);
+
+        const chartdaily = new Chart("51808363-f93c-4230-9622-40c612623db6", "120px", { 'ShipmentInfo.CreateDate': today, "CompanyID": CompanyId }, "chartdaily")
+        chartdaily.render(sdk);
+
+        const chartcitymonthly = new Chart("06136755-4b82-4c25-bc80-973c2f3dc82d", "400px", getFilterdates(), "chartcitymonthly")
+        chartcitymonthly.render(sdk);
+
+        const chartdistributormonthly = new Chart("3a7ca18e-39fa-4f5b-ba61-773404f49c38", "400px", getFilterdates(), "chartdistributormonthly")
+        chartdistributormonthly.render(sdk);
+
+        const chartcountshipmentmonthly = new Chart("2d0e3902-cdfb-444c-b133-51598231bdfc", "400px", { "CompanyID": CompanyId }, "chartcountshipmentmonthly")
+        chartcountshipmentmonthly.render(sdk);
+
+        const chartcountshipmentdistributormonthly = new Chart("37b6e1e3-754c-4d1c-a24c-bb65ac27fdec", "400px", { "CompanyID": CompanyId }, "chartcountshipmentdistributormonthly")
+        chartcountshipmentdistributormonthly.render(sdk);
+
+
+    </script>
+
+
+</body>
+
+</html>

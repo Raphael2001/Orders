@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="he_IL" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link href="vendor/css/material-dashboard.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="vendor/datetimepickeri18n/jquery.datetimepicker.css" type="text/css">
+    <link rel="stylesheet" href="https://fomantic-ui.com/dist/semantic.css">
+
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="vendor/datatimepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="vendor/css/style.css" type="text/css">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+
+
+
+    <title>משלוחים</title>
+    <style>
+        @media (max-width: 690px) {
+            .popup {
+                width: 90%;
+            }
+        }
+
+        @media (min-height: 780px) {
+            .popup {
+                height: 640px !important;
+            }
+        }
+
+        .popup {
+            height: 78vh;
+            width: 60%;
+        }
+    </style>
+
+
+</head>
+<div id="loader-wrapper">
+    <div id="loader"></div>
+
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+
+</div>
+
+<body id="orderssummary">
+    <div id="lock-modal"></div>
+    <div id="loading-circle"></div>
+    <div class="wrapper">
+        <div id="sidebar" class="sidebar" data-color="green">
+        </div>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav id="navbar" class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+
+            </nav> <!-- End Navbar -->
+
+            <div class="content">
+
+                <div class="container-fluid">
+
+                    <div class="wrapper">
+
+                        <div class="container">
+                            <div class="row">
+                                <h3 class="heading">סיכום המשלוחים</h3>
+
+                                <section id="filter">
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 col-sm-12">
+                                            <div id="reportrange"
+                                                style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+                                                <i class="bx bxs-calendar"></i>&nbsp;
+                                                <span></span><i class='bx bx-caret-down' style="margin-right: 5px;"></i>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12">
+                                            <div class="input-field">
+                                                <input type="text" class="form-control orderno" id="orderno-search"
+                                                    placeholder="מספר משלוח" style="text-transform: uppercase;">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4 col-md-12 col-sm-12">
+
+                                            <div class='ui multiple selection dropdown'
+                                                style="width:100%; height: auto;">
+                                                <i class='dropdown icon' ></i>
+
+                                                <div class='text'></div>
+
+                                                <div class='menu' id="distributor">
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
+                                            <button class="btn btn-search" onclick="filterby()">חפש</button>
+
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+
+
+                                </section>
+
+                                <section id="orders">
+
+
+
+                                    <button class="btn btn-primary printorders" onclick="tableToExcel()">
+                                        <i class='bx bxs-file-import'></i> הוצאה לאקסל
+                                    </button>
+                                    <button class="btn btn-primary btn_submit" id="btn_submit"
+                                        onclick="showpopup('ChoosePrintingType')"><span class='bx bx-printer'></span>
+                                        הדפסה</button>
+                                    <button class="btn btn-primary btn_update" id="btn_update"><span
+                                            class='bx bx-cloud-upload'></span> עדכן רשומות</button>
+
+                                    <table class="orderstable" id="orderstable">
+                                        <thead>
+                                            <tr>
+                                                <th>תאריך הזמנה</th>
+                                                <th>מספר הזמנה</th>
+                                                <th>שם לקוח</th>
+                                                <th>כתובת</th>
+                                                <th>טלפון</th>
+                                                <th>סטטוס</th>
+                                                <th>מפיץ</th>
+                                                <th>
+                                                    <div class="input-group side-checks"> <input type="checkbox"
+                                                            id="check-all">
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody"></tbody>
+
+                                    </table>
+
+
+
+                                    <div class="showmore">
+                                        <button type="button" class="btn btn_showmore" id="btn_showmore">הצג
+                                            עוד</button>
+                                    </div>
+                                </section>
+                                <div>
+                                    <img class="image-empty" id="image-empty" src="img/empty.svg" alt="אין תוצאות">
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="popup-container" id="popup-container">
+                            <div class="popup-table">
+                                <div class="popup-table-cell">
+                                    <div class="popup">
+
+                                        <div class="title">
+                                            <span id="order-title"></span>
+
+                                            <span class="closepopup"
+                                                onclick="closepopup('popup-container')">&times;</span>
+
+                                        </div>
+                                        <div class="content">
+                                            <div class="modal-contents"
+                                                style="background-color:transparent;width:100%; ">
+                                                <div class="orderdetails">
+                                                    <div class="container">
+
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <h3>שולח</h3>
+                                                                <br>
+                                                                <strong id="spickuppointname" for="pickuppointname">שם
+                                                                    מלא:</strong>
+                                                                <label id="pickuppointname"></label>
+                                                                <br>
+                                                                <strong id="spickuppointphone"
+                                                                    for="pickuppointphone">מספר
+                                                                    טלפון:</strong>
+                                                                <label id="pickuppointphone"></label>
+                                                                <br>
+                                                                <strong id="spickuppointaddress"
+                                                                    for="pickuppointaddress">כתובת:</strong>
+                                                                <label id="pickuppointaddress"></label>
+                                                                <br>
+                                                                <strong id="spickuppointmail"
+                                                                    for="pickuppointmail">מייל:</strong>
+                                                                <label id="pickuppointmail"></label>
+                                                                <br>
+                                                                <strong id="spickuppointcomment"
+                                                                    for="pickuppointcomment">הערה:</strong>
+                                                                <label id="pickuppointcomment"></label>
+
+                                                            </div>
+
+                                                            <div class="col">
+                                                                <div class="col">
+                                                                    <h3>מקבל</h3>
+                                                                    <br>
+                                                                    <strong id="sdropoffpointname"
+                                                                        for="dropoffpointname">שם
+                                                                        מלא:</strong>
+                                                                    <label id="dropoffpointname"></label>
+                                                                    <br>
+                                                                    <strong id="sdropoffpointphone"
+                                                                        for="dropoffpointphone">מספר
+                                                                        טלפון:</strong>
+                                                                    <label id="dropoffpointphone"></label>
+                                                                    <br>
+                                                                    <strong id="sdropoffpointaddress"
+                                                                        for="dropoffpointaddress">כתובת:</strong>
+                                                                    <label id="dropoffpointaddress"></label>
+                                                                    <br>
+                                                                    <strong id="sdropoffpointmail"
+                                                                        for="dropoffpointmail">מייל:</strong>
+                                                                    <label id="dropoffpointmail"></label>
+                                                                    <br>
+                                                                    <strong id="sdropoffpointcomment"
+                                                                        for="dropoffpointcomment">הערה:</strong>
+                                                                    <label id="dropoffpointcomment"></label>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <h3 class="shipment_info">פרטי המשלוח</h3>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+
+                                                            <div class="col">
+                                                                <br>
+                                                                <strong id="sorderid" for="orderid">מספר מזהה:</strong>
+                                                                <label id="orderid"></label>
+
+                                                                <br>
+                                                                <strong id="sordercreater" for="ordercreate">נוצר
+                                                                    בתאריך:</strong>
+                                                                <label id="ordercreate"></label>
+
+
+                                                                <br>
+                                                                <strong id="sordercreator"
+                                                                    for="ordercreator">יוצר:</strong> <label
+                                                                    id="ordercreator"></label>
+
+
+                                                                <br>
+                                                                <strong for="orderdelivery">תאריך מסירה :</strong>
+                                                                <label id="orderdelivery"></label>
+
+                                                                <br>
+                                                                <strong id="sorderexternalid" for="orderexternalid">מספר
+                                                                    מזהה חיצוני
+                                                                    :</strong>
+                                                                <label id="orderexternalid"></label>
+
+                            
+                                                            </div>
+                                                            <div class="col">
+                                                                <br>
+                                                                <strong id="sorderistributor" for="orderistributor">
+                                                                    מפיץ:</strong>
+                                                                <label id="orderistributor"></label>
+                                                                <br>
+                                                                <strong id="sorderstatus" for="orderstatus">
+                                                                    סטטוס:</strong> <label id="orderstatus"></label>
+                                                                <br>
+                                                                <strong for="orderpickup">תאריך אסיפה:</strong> <label
+                                                                    id="orderpickup"></label>
+
+                                                                <br>
+                                                                <strong id="sorderexternalstatus"
+                                                                    for="orderexternalstatus">סטטוס
+                                                                    חיצוני:</strong>
+                                                                <label id="orderexternalstatus"></label>
+                                                                <br>
+                                                                <strong id="sordertype" for="ordertype">סוג:</strong>
+                                                                <label id="ordertype"></label>
+                                                                
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="btn"
+                                                                    onclick='window.open("delivery-edit.html", "_self")'>
+                                                                    ערוך משלוח</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="bg-modal " id="bg-modal">
+            <div class="modal-contents">
+
+                <span class="closepopup close_btn" onclick="closepopup('bg-modal')">&times;</span>
+                <form action="" id="form_update">
+                    <br>
+                    <br>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <div class="date-input">
+                                <label for="PickUpDate">תאריך איסוף: </label>
+                                <input id="PickUpDate" type="text" name="PickUpDate" class="datetimepickeri18n update"
+                                    autocomplete="off">
+
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="date-input">
+                                <label for="DeliveryDate">תאריך הגעה ליעד: </label>
+                                <input id="DeliveryDate" type="text" name="DeliveryDate"
+                                    class="datetimepickeri18n update" autocomplete="off">
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+
+                        <div class="input-field">
+
+                            <select list="status" class="form-control deliverystatus" name="status"
+                                class="deliverystatus update" id="status">
+                                <datalist id="status">
+                                    <option value="" disabled selected hidden>סטטוס</option>
+                                    <option value="נוצר">נוצר</option>
+                                    <option value="מחכה לאיסוף">מחכה לאיסוף</option>
+                                    <option value="בדרך ליעד">בדרך ליעד</option>
+                                    <option value="נמסרה שליחות חלק ראשון (שליחות כפולה)">
+                                        נמסרה שליחות חלק ראשון (שליחות כפולה)</option>
+                                    <option value="נמסר">נמסר</option>
+                                    <option value="בעיה במסירה">בעיה במסירה</option>
+                                    <option value="בוטל">בוטל</option>
+                                </datalist>
+                            </select>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary btn_update" id="btn_update_on_popup" target="_blank"
+                        onclick="updateDetails()">עדכן רשומות</a>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div id="ChoosePrintingType" class="ChoosePrintingType modal-small-wrapper">
+
+            <div class="modal-small modal-choose-printing-type" style="width: 35%;">
+                <span class="close" onclick="closepopup('ChoosePrintingType')">&times;</span>
+                <br>
+                <p>אנא בחרו את סוג ההדפסה הרצוי</p>
+                <button class="btn " onclick="printingtype('a4')">A4</button>
+                <button class="btn" onclick="printingtype('sticker')">מדבקה</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/js/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+        integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
+        crossorigin="anonymous"></script>
+    <script src="vendor/js/popper.min.js"></script>
+    <script src="vendor/js/material-dashboard.js"></script>
+    <script src="vendor/js/bootstrap-material-design.min.js"></script>
+    <script src="https://fomantic-ui.com/dist/semantic.min.js"></script>
+
+    <script type="text/javascript" src="vendor/datatimepicker/moment.min.js"></script>
+    <script type="text/javascript" src="vendor/datatimepicker/daterangepicker.js"></script>
+    <script src="vendor/datetimepickeri18n/jquery.datetimepicker.full.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/app.js"></script>
+
+
+    <script>
+
+        window.onload = checkuser();
+        window.onload = localStorage.setItem("lastid", 0);
+
+        analytics.logEvent('A new Entry in Orders Summary page');
+
+        window.onload = adddistributor();
+        function adddistributor() {
+            var src = document.getElementById("distributor");
+            Company = getcurrentCompany();
+            distributors = Company.Distributors;
+
+            for (var key in distributors) {
+
+                if (distributors.hasOwnProperty(key)) {
+                    distributor = distributors[key];
+                    option = document.createElement("option");
+
+
+                    var keys = Object.keys(distributor);
+                    dbname = ""
+                    displayname = ""
+                    var values = keys.map(function (key) {
+                        if (key == "DBName") {
+                            dbname = distributor[key];
+                        } else if (key == "DisplayName") {
+                            displayname = distributor[key];
+                        }
+                        option = `<div class='item' id= ${dbname}>${displayname}</div>`
+
+
+                    });
+                }
+
+                src.insertAdjacentHTML('beforeend', option);
+            }
+        }
+
+        window.onload = loaddata();
+
+        $('.dropdown').dropdown();
+        $('.dropdown .text').text('בחר מפיצים');
+
+
+        jQuery('.datetimepickeri18n').datetimepicker();
+        jQuery.datetimepicker.setLocale('he');
+
+
+        jQuery('.datetimepickeri18n').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+
+        $(function () {
+            $("#btn_showmore").on('click', function () {
+
+                loaddata();
+
+            });
+
+            var start = moment().subtract(0, 'days');
+            var end = moment();
+
+
+            function cb(start, end) {
+                $('#reportrange span').html('  מ -  ' + start.format('YYYY-MM-DD') + '  עד -   ' + end.format('YYYY-MM-DD'));
+
+            }
+
+            $('#reportrange').daterangepicker({
+                opens: 'center',
+                startDate: start,
+                endDate: end,
+                showCustomRangeLabel: false,
+                alwaysShowCalendars: true,
+                ranges: {
+                    'היום': [moment(), moment()],
+                    'אתמול': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'השבוע האחרון': [moment().subtract(6, 'days'), moment()],
+                    'ה- 30 ימים האחרונים': [moment().subtract(29, 'days'), moment()],
+                    'החודש הזה': [moment().startOf('month'), moment().endOf('month')],
+                    'חודש קודם': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                datefrom = picker.startDate.format('YYYY-MM-DD');
+                dateto = picker.endDate.format('YYYY-MM-DD');
+                // loaddatabydateandorderno(datefrom, dateto, "");
+                filterby();
+            });
+
+
+            cb(start, end);
+
+        });
+
+        document.getElementById('btn_update').addEventListener("click", function () {
+            document.querySelector('.bg-modal').style.display = "flex";
+            document.body.style = "overflow: hidden;margin: 0;height: 100%;";
+            window.scrollTo(0, 0);
+            clearformbyclassname("update");
+
+
+        });
+
+
+        var modal = document.querySelector('.order-model');
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style = "overflow: scroll";
+
+            }
+        }
+
+
+        var modal = document.querySelector('.bg-modal');
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style = "overflow: scroll";
+
+            }
+        }
+
+        const formupdate = document.getElementById("form_update");
+        formupdate.addEventListener("submit", (e) => {
+            e.preventDefault();
+            showspinner();
+        });
+
+        $("#check-all").click(function () {
+            // this function will get executed every time the #check-all element is clicked (or tab-spacebar changed)
+            if ($(this).is(":checked")) // "this" refers to the element that fired the event
+            {
+                checkAll();
+            }
+            else {
+                clearselction();
+            }
+        });
+
+        $(document).ready(function () {
+
+            document.getElementById("btn_submit").disabled = true;
+            document.getElementById("btn_update").disabled = true;
+
+        });
+
+        $('#orderstable').on('change', "input[type='checkbox']", function () { checkscheckbox(); });
+
+        function checkscheckbox() {
+            var len = $("input[type='checkBox']:checked").length;
+            if (len == 0) {
+                document.getElementById("btn_submit").disabled = true;
+                document.getElementById("btn_update").disabled = true;
+                $("#check-all").prop('checked', false);
+            }
+            else {
+                document.getElementById("btn_submit").removeAttribute('disabled');
+                document.getElementById("btn_update").removeAttribute('disabled');
+
+
+
+            }
+
+
+        }
+
+        function filterby() {
+            var picker = $('#reportrange').data('daterangepicker');
+            orderno = document.getElementById("orderno-search").value.toUpperCase();
+            datefrom = picker.startDate.format('YYYY-MM-DD');
+            dateto = picker.endDate.format('YYYY-MM-DD');
+            var today = new Date(y, m, d).toISOString();
+            today = getDatefromDatetimestring(today);
+            distributors = getseleceteddistributors()
+            if (distributors == []) {
+                distributors = ""
+            }
+
+            if ((datefrom == dateto) && (datefrom == today)) {
+                loaddatabydateordernoanddistributors("", "", orderno, distributors);
+            }
+            else {
+                loaddatabydateordernoanddistributors(datefrom, dateto, orderno, distributors);
+            }
+        }
+
+        function printingtype(desired_type) {
+            array = getCheckedBoxs();
+            window.open(`${desired_type}.html?dno=` + array, "MyTargetWindowName");
+            closepopup("ChoosePrintingType");
+
+        }
+
+
+
+
+        function getseleceteddistributors() {
+            var src = document.getElementById("distributor");
+            distributors = src.children
+
+            choosen = []
+            for (i = 0; i < distributors.length; i++) {
+                distributor = distributors[i]
+                if (distributor.classList.contains("active")) {
+                    choosen.push(`"${distributor.id}"`)
+                }
+            }
+            return choosen;
+
+        }
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>

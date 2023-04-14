@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="he_IL">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="משלוחים 360 היא תוכנה אשר באה לארגן את המשלוחים שלכם במקום אחד ולתת לכם שליטה מלאה על כל המשלוחים
+    התוכנה מאחדת את השירותים של כמה חברות משלוחים במקום אחד, ידידותי ונוח למשתמש.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+    <link rel="stylesheet" href="vendor/css/loginform.css" />
+
+    <title>משלוחים 360</title>
+</head>
+
+<body>
+
+
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+    <div id="firebaseui-auth-container" class="container">
+        <div id="lock-modal"></div>
+        <div id="loading-circle"></div>
+
+        <div class="forms-container">
+
+            <div class="signin-signup">
+
+                <form onsubmit="login()" class="sign-in-form" id="sign-in-form">
+                    <h2 class="appname"><span class="version txt-rotate " data-period="1000 "
+                            data-rotate='[ "alpha", "alpha"]'></span> משלוחים 360</h2>
+                    <span></span>
+
+                    <h2 class="title">כניסה</h2>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="userEmail" placeholder="מייל" autocomplete="email" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="userPassword" placeholder="סיסמא" autocomplete="current-password"
+                            required />
+                    </div>
+                    <div class="forgotpassword">
+                        <a href="forgotpassword.html"  class="link-forgotpassword">?שכחת סיסמא</a>
+
+                    </div>
+                    <input type="submit" value="היכנס" class="btn" />
+                    <a class="btn" style="text-align: center;" href="logindistributor.html">כניסה לשליחים</a>
+
+                </form>
+
+                <form onsubmit="newuser()" class="sign-up-form" id="sign-up-form">
+                    <h2 class="title">הרשמה</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="שם מלא" id="new-fullname" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="מייל" id="new-email" autocomplete="username" required />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="סיסמא" id="new-password" autocomplete="new-password"
+                            required />
+                    </div>
+                    <input type="submit" class="btn" value="הירשם" />
+                </form>
+            </div>
+        </div>
+
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>? לקוח חדש</h3>
+                    <p>
+                        בואו תהיו חלק מהחברות שמשתמשות במערכת שלנו
+                    </p>
+                    <button class="btn-form transparent" id="sign-up-btn">
+                        ! יאללה נרשמים
+                    </button>
+                </div>
+                <img src="img/log.svg" class="image" alt="תמונה" />
+            </div>
+            <div class="panel right-panel">
+                <div class="content">
+                    <h3>? אחד מאיתנו</h3>
+                    <p>
+                        ? כל המערכת מחכה לך בלחיצת כפתור, אז יאללה למה מחכים </p>
+                    <button class="btn-form transparent" id="sign-in-btn">
+                        היכנס
+                    </button>
+                </div>
+                <img src="img/register.svg" class="image" alt="תמונה" />
+            </div>
+        </div>
+    </div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/app.js"></script>
+    <script>
+        analytics.logEvent('A new Entry in Login page');
+        const sign_in_btn = document.querySelector("#sign-in-btn");
+        const sign_up_btn = document.querySelector("#sign-up-btn");
+        const container = document.querySelector(".container");
+
+        mode = getKeyWordFromQuery("mode")
+        if (mode == "sign-up") {
+            container.classList.add("sign-up-mode");
+        }
+        else {
+            container.classList.remove("sign-up-mode");
+        }
+
+        sign_up_btn.addEventListener("click", () => {
+            container.classList.add("sign-up-mode");
+        });
+
+        sign_in_btn.addEventListener("click", () => {
+            container.classList.remove("sign-up-mode");
+        });
+
+        const signup = document.getElementById("sign-up-form");
+        const signin = document.getElementById("sign-in-form");
+        signup.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+        });
+        signin.addEventListener("submit", (e) => {
+            e.preventDefault();
+            showspinner();
+
+        });
+
+        window.onload = function () {
+            var elements = document.getElementsByClassName('txt-rotate');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-rotate');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtRotate(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+            // INJECT CSS
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #666 }";
+            document.body.appendChild(css);
+        };
+    </script>
+
+</body>
+
+</html>

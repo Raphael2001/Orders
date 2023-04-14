@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="he_IL" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
+
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css" />
+    <link rel="stylesheet" href="vendor/css/logindistibutor.css" />
+
+    <title>התחברות לשליחים</title>
+</head>
+
+<body>
+
+
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+    <div id="lock-modal"></div>
+    <div id="loading-circle"></div>
+
+    <div class="form-structor">
+        <form onsubmit="login()" id="sign-in-form">
+            <div class="signup">
+
+                <h2 class="form-title" id="signup">התחברות</h2>
+                <div class="form-holder">
+                    <input type="text" class="input" placeholder="מספר מזהה חברה" id="companyid" />
+                    <input type="text" class="input" placeholder="שם משתמש" id="username" />
+                    <input type="password" class="input" placeholder="סיסמא" id="password" />
+                </div>
+                <button class="submit-btn">היכנס</button>
+            </div>
+        </form>
+        <div class="login slide-up">
+            <div class="center">
+                <h2 class="form-title" id="login"><span></span>התחברות לשליחים</h2>
+            </div>
+        </div>
+    </div>
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+    <script type="text/javascript " src="vendor/js/main.js"></script>
+    <script type="text/javascript " src="vendor/js/distributor.js"></script>
+    <script>
+        analytics.logEvent('A new Entry in Login Distributor page');
+
+
+        const signin = document.getElementById("sign-in-form");
+        signin.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+        });
+    </script>
+
+</body>
+
+</html>
