@@ -76,8 +76,8 @@ function userActivityThrottler() {
 function signout() {
   //sign out the user
   analytics.logEvent("user is log out", {
-    email: localStorage.getItem("email"),
-    UID: localStorage.getItem("uid"),
+    email: localStorage.getItem("Mail"),
+    UID: localStorage.getItem("Token"),
   });
 
   window.open(loginpageulr, "_self");
@@ -175,7 +175,7 @@ function ErrorHandling(result) {
       message = Object.values(message)[0];
     }
     document.getElementById("error-log").innerHTML = message;
-    console.log(message)
+    console.log(message);
     showpopup("modalerror");
     return false;
   }

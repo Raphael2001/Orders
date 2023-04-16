@@ -161,9 +161,9 @@ function loadsidebar() {
 function inactiveUserAction() {
   // logout logic
   analytics.logEvent("user is automatically loged out", {
-    email: localStorage.getItem("email"),
+    email: localStorage.getItem("Mail"),
   });
-  analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+  analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
   signout();
 }
@@ -176,7 +176,7 @@ function getusernamefromlocalStorage() {
   for (var key in users) {
     // check if the property/key is defined in the object itself, not in parent
     if (users.hasOwnProperty(key)) {
-      if (key == localStorage.getItem("uid")) {
+      if (key == localStorage.getItem("Token")) {
         user = users[key];
         return user["Fullname"];
       }
@@ -197,7 +197,7 @@ function createDelivery() {
 
   const distributor = document.getElementById("distributor").value;
   const type = document.getElementById("type").value;
-  const token = localStorage.getItem("uid");
+  const token = localStorage.getItem("Token");
   const companyid = getCompanyID();
   state = localStorage.getItem("stateid");
   const direction = document.getElementById(state).value;
@@ -280,7 +280,7 @@ function createDelivery() {
           putCompanyDeatials_trigger("sender");
           // location.reload();
           analytics.logEvent("New Delivery Created", { OrderNumber: orderNo });
-          analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
         })
         .catch(function (error) {
           console.log(error);
@@ -302,7 +302,7 @@ function updateDelivery() {
 
   const distributor = document.getElementById("distributor").value;
   const type = document.getElementById("type").value;
-  const token = localStorage.getItem("uid");
+  const token = localStorage.getItem("Token");
   const companyid = getCompanyID();
   state = localStorage.getItem("stateid");
   const direction = document.getElementById(state).value;
@@ -408,7 +408,7 @@ function loaddata() {
   hideemptyimg();
   lastid = localStorage.getItem("lastid");
   compnayId = getCompanyID();
-  uid = localStorage.getItem("uid");
+  uid = localStorage.getItem("Token");
   const URL =
     BASE +
     "/shipping?lastid=" +
@@ -480,7 +480,7 @@ function loaddatabydateordernoanddistributors(
   });
 
   compnayId = getCompanyID();
-  uid = localStorage.getItem("uid");
+  uid = localStorage.getItem("Token");
   lastid = localStorage.getItem("lastid");
   console.log(distributors);
   const URL =
@@ -859,7 +859,7 @@ function updatedata(index) {
     pickupdate: PickUpDate,
     deliverydate: DeliveryDate,
     status: Status,
-    token: localStorage.getItem("uid"),
+    token: localStorage.getItem("Token"),
     companyid: getCompanyID(),
   };
   console.log(Data);
@@ -897,8 +897,8 @@ function createCompany() {
   const companyPhone = document.getElementById("companyphone").value;
   const companyComment = document.getElementById("companycomment").value;
   const userfullname = document.getElementById("userfullname").value;
-  const Email = localStorage.getItem("email");
-  const UID = localStorage.getItem("uid");
+  const Email = localStorage.getItem("Mail");
+  const UID = localStorage.getItem("Token");
 
   const Data = {
     companyName: companyName,
@@ -927,13 +927,13 @@ function createCompany() {
         id = res["body"]["body"];
         console.log("New Company Created " + id);
         getCompanybyUsersEmail(
-          localStorage.getItem("email"),
-          localStorage.getItem("uid"),
+          localStorage.getItem("Mail"),
+          localStorage.getItem("Token"),
           true
         );
         clearformbyclassname("company");
         analytics.logEvent("New Company Created", { companyid: id });
-        analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
       }
       hidespinner();
     })
@@ -985,9 +985,9 @@ function newuser() {
           localStorage.setItem("uid", res["body"]["body"]);
           window.open("createcompany.html?fullname=" + userFullname, "_self");
           analytics.logEvent("new user is created", {
-            email: localStorage.getItem("email"),
+            email: localStorage.getItem("Mail"),
           });
-          analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
         }
         hidespinner();
       })
@@ -1034,12 +1034,12 @@ function login() {
           }
         }
 
-        uid = localStorage.getItem("uid");
-        getCompanybyUsersEmail(localStorage.getItem("email"), uid, true);
+        uid = localStorage.getItem("Token");
+        getCompanybyUsersEmail(localStorage.getItem("Mail"), uid, true);
         analytics.logEvent("login", { method: "Email", UID: uid });
-        analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
-        console.log(localStorage.getItem("email"));
+        console.log(localStorage.getItem("Mail"));
       } else {
         hidespinner();
       }
@@ -1103,14 +1103,14 @@ function putCompanyDeatials() {
   document.getElementById("companycomment").innerHTML = Company.CompanyComment;
   document.getElementById("userfullname").innerHTML =
     getusernamefromlocalStorage();
-  document.getElementById("mail").innerHTML = localStorage.getItem("email");
-  document.getElementById("token").innerHTML = localStorage.getItem("uid");
+  document.getElementById("mail").innerHTML = localStorage.getItem("Mail");
+  document.getElementById("token").innerHTML = localStorage.getItem("Token");
 }
 
 function checkuser() {
   // check if user is loged in
-  uid = localStorage.getItem("uid");
-  email = localStorage.getItem("email");
+  uid = localStorage.getItem("Token");
+  email = localStorage.getItem("Mail");
   if (uid == null || email == null) {
     window.open(loginpageulr, "_self");
   }
@@ -1292,8 +1292,7 @@ function putCompanyDeatialsininput(company, place) {
   document.getElementById(place + "address").value = company.CompanyStreet;
   document.getElementById(place + "city").value = company.CompanyCity;
   document.getElementById(place + "phone").value = company.CompanyPhone;
-  document.getElementById(place + "email").value =
-    localStorage.getItem("email");
+  document.getElementById(place + "email").value = localStorage.getItem("Mail");
   document.getElementById(place + "phone2").value = "";
   document.getElementById(place + "comment").value = company.CompanyComment;
 }
@@ -1590,7 +1589,7 @@ function getdatafromquerystring(data_name) {
 
 function getdistributor(distributor_name) {
   // getting distributor from the distributors table in the db
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
   CompanyId = getCompanyID();
   const URL =
     BASE +
@@ -1675,7 +1674,7 @@ function adddistributorttocompany() {
 
   let Data = {
     distributorid: distributorid,
-    token: localStorage.getItem("uid"),
+    token: localStorage.getItem("Token"),
     companyid: String(getCompanyID()),
   };
 
@@ -1703,10 +1702,10 @@ function adddistributorttocompany() {
         }
         localStorage.setItem("Company", JSON.stringify(Company));
         analytics.logEvent("a distributor is add", {
-          email: localStorage.getItem("email"),
+          email: localStorage.getItem("Mail"),
           DBName: distributors[key].DBName,
         });
-        analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
         window.open("myconnections.html", "_self");
       }
@@ -1833,7 +1832,7 @@ function remove_distributor_click(id) {
   const URL = BASE + "/removedistributorfromcompany";
 
   const Data = {
-    token: localStorage.getItem("uid"),
+    token: localStorage.getItem("Token"),
     companyid: getCompanyID(),
     distributorname: id,
   };
@@ -1917,7 +1916,7 @@ function addusertocompany() {
   const user_fullname = document.getElementById("user-fullname").value;
   const user_role = document.getElementById("user-role").value;
   const companyid = getCompanyID();
-  let uid = localStorage.getItem("uid");
+  let uid = localStorage.getItem("Token");
 
   if (checkPassword(user_password)) {
     const Data = {
@@ -1975,7 +1974,7 @@ function addusertocompany() {
 
 function getuserfromdb(needtoredirect) {
   // getting uset from the users table in the db
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
   CompanyId = getCompanyID();
   const URL = BASE + "/users?companyid=" + CompanyId + "&token=" + token;
   console.log(URL);
@@ -2036,10 +2035,10 @@ function addfavorite(favoritedata) {
         console.log(favorite_response);
         setfavoriteinuser(favorite_response);
         analytics.logEvent("a new favorite is created", {
-          email: localStorage.getItem("email"),
+          email: localStorage.getItem("Mail"),
           favid: favorite_response.Id,
         });
-        analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
       }
       hidespinner();
     })
@@ -2059,7 +2058,7 @@ function getfavoritedatatofetch(favoritedata) {
     mail: favoritedata.email,
     comment: favoritedata.comment,
     companyid: getCompanyID(),
-    token: localStorage.getItem("uid"),
+    token: localStorage.getItem("Token"),
   };
   return Data;
 }
@@ -2118,7 +2117,7 @@ function favbuttonclick(button) {
 }
 
 function getfavoritedatabyid(id, place) {
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
   CompanyId = getCompanyID();
   const URL =
     BASE + "/favorite?companyid=" + CompanyId + "&token=" + token + "&id=" + id;
@@ -2211,7 +2210,7 @@ function deleteuser(token) {
           localStorage.setItem("Company", JSON.stringify(company));
 
           analytics.logEvent("a user is been deleted", {
-            email: localStorage.getItem("email"),
+            email: localStorage.getItem("Mail"),
           });
           analytics.setUserProperties({ UID: token });
         }
@@ -2229,7 +2228,7 @@ function deletefavorite(id) {
   // deletes a favorite
 
   const URL = BASE + "/removefavorite";
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
   const Data = {
     token: token,
     companyid: getCompanyID(),
@@ -2260,7 +2259,7 @@ function deletefavorite(id) {
         localStorage.setItem("User", JSON.stringify(user));
 
         analytics.logEvent("a favorite is been deleted", {
-          email: localStorage.getItem("email"),
+          email: localStorage.getItem("Mail"),
         });
         analytics.setUserProperties({ UID: token });
         location.reload();
@@ -2285,7 +2284,7 @@ function addcustomdistributorttocompany() {
   if (error == "") {
     let Data = {
       distributorname: distributorname,
-      token: localStorage.getItem("uid"),
+      token: localStorage.getItem("Token"),
       companyid: getCompanyID(),
       username: username,
       password: password,
@@ -2323,10 +2322,10 @@ function addcustomdistributorttocompany() {
           document.getElementById("modal-password").innerHTML = password;
 
           analytics.logEvent("a new distributor is add", {
-            email: localStorage.getItem("email"),
+            email: localStorage.getItem("Mail"),
             DBName: distributor_name,
           });
-          analytics.setUserProperties({ UID: localStorage.getItem("uid") });
+          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
         }
         hidespinner();
       })
@@ -2374,7 +2373,7 @@ function updateuser() {
   const URL = BASE + "/users";
   company = getcurrentCompany();
   user = getcurrentuser();
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
 
   const Data = {
     token: token,
@@ -2406,7 +2405,7 @@ function updateuser() {
         localStorage.setItem("Company", JSON.stringify(company));
 
         analytics.logEvent("a user is been updated", {
-          email: localStorage.getItem("email"),
+          email: localStorage.getItem("Mail"),
         });
         analytics.setUserProperties({ UID: token });
       }
@@ -2429,7 +2428,7 @@ function updateCompany() {
   city = document.getElementById("companycity").value;
   phone = document.getElementById("companyphone").value;
   comment = document.getElementById("companycomment").value;
-  token = localStorage.getItem("uid");
+  token = localStorage.getItem("Token");
 
   const Data = {
     token: token,
@@ -2464,7 +2463,7 @@ function updateCompany() {
         localStorage.setItem("Company", JSON.stringify(company));
 
         analytics.logEvent("a company is been updated", {
-          email: localStorage.getItem("email"),
+          email: localStorage.getItem("Mail"),
         });
         analytics.setUserProperties({ UID: token });
       }
