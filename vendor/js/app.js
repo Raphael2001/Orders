@@ -637,6 +637,11 @@ function createStickers(data) {
       SHIPMENTINFO.ExternalBarcode,
       "#barcode-" + SHIPMENTINFO.OrderNo
     );
+  } else if (SHIPMENTINFO.Distributor.DBName === "Tapuz") {
+    generateBarcode(
+      SHIPMENTINFO.Externalid,
+      "#barcode-" + SHIPMENTINFO.OrderNo
+    );
   } else {
     generateBarcode(SHIPMENTINFO.OrderNo, "#barcode-" + SHIPMENTINFO.OrderNo);
   }
