@@ -42,6 +42,7 @@ function loadnavbar() {
   initials = getfirstletterofanyword(fullname);
   navbar = `
   <div class="container-fluid">
+  
  
   <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
       aria-expanded="false" aria-label="Toggle navigation">
