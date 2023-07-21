@@ -51,7 +51,7 @@ function loadnavbar() {
       <span class="navbar-toggler-icon icon-bar"></span>
       <span class="navbar-toggler-icon icon-bar"></span>
   </button>
-  
+
   <div class="user-navigation" id = "user-navigation" >
     <div class = "initials">
       <h6>${initials}</h6>
@@ -1681,8 +1681,7 @@ function adddistributorttocompany() {
 
   let Data = {
     distributorid: distributorid,
-    token: localStorage.getItem("Token"),
-    companyid: String(getCompanyID()),
+    uid: localStorage.getItem("Token"),
   };
 
   inputs = document.getElementsByTagName("input");
@@ -1695,9 +1694,9 @@ function adddistributorttocompany() {
       "Content-Type": "application/json; charset=UTF-8",
     },
     body: JSON.stringify(Data),
-    method: "PUT",
+    method: "POST",
   };
-  console.log(URL);
+
   fetch(URL, otherPram)
     .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
     .then((res) => {
