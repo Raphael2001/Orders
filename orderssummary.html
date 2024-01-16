@@ -95,7 +95,7 @@
 
                                             <div class='ui multiple selection dropdown'
                                                 style="width:100%; height: auto;">
-                                                <i class='dropdown icon' ></i>
+                                                <i class='dropdown icon'></i>
 
                                                 <div class='text'></div>
 
@@ -144,6 +144,7 @@
                                                 <th>טלפון</th>
                                                 <th>סטטוס</th>
                                                 <th>מפיץ</th>
+                                                <th>הודפס</th>
                                                 <th>
                                                     <div class="input-group side-checks"> <input type="checkbox"
                                                             id="check-all">
@@ -281,7 +282,7 @@
                                                                     :</strong>
                                                                 <label id="orderexternalid"></label>
 
-                            
+
                                                             </div>
                                                             <div class="col">
                                                                 <br>
@@ -303,7 +304,7 @@
                                                                 <br>
                                                                 <strong id="sordertype" for="ordertype">סוג:</strong>
                                                                 <label id="ordertype"></label>
-                                                                
+
                                                             </div>
 
                                                         </div>
@@ -620,6 +621,7 @@
 
         function printingtype(desired_type) {
             array = getCheckedBoxs();
+            printShipping(array)
             window.open(`${desired_type}.html?dno=` + array, "MyTargetWindowName");
             closepopup("ChoosePrintingType");
 
