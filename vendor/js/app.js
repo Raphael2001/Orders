@@ -540,6 +540,7 @@ function createtable(data) {
   var src = document.getElementById("tbody");
   const DROPOFFPOINT = data["DropOffPoint"];
   const SHIPMENTINFO = data["ShipmentInfo"];
+  const printed = data.Printed;
   orderNo = SHIPMENTINFO.OrderNo;
   row = ` <tr class = "trbody" value = "${orderNo}" id = "${orderNo}">
           <td data-th="תאריך הזמנה">${SHIPMENTINFO.CreateDate}</td>
@@ -551,6 +552,13 @@ function createtable(data) {
           <td data-th="טלפון">${DROPOFFPOINT.Phone}</td>
           <td data-th="סטטוס">${SHIPMENTINFO.Status}</td>
           <td data-th="מפיץ">${SHIPMENTINFO.Distributor.DisplayName}</td>
+          <td data-th="הודפס">
+            ${
+              printed
+                ? `<span class="bx bx-check" />`
+                : `<span class="bx bx-x" />`
+            }
+          </td>
           <td data-th= "בחר">
               <input class="check-single" type="checkbox" id="check-${orderNo}" value="${orderNo}">
           </td>
@@ -869,7 +877,6 @@ function updatedata(index) {
     token: localStorage.getItem("Token"),
     companyid: getCompanyID(),
   };
-  console.log(Data);
 
   const otherPram = {
     headers: {
@@ -2606,4 +2613,36 @@ function check_dir_for_distributor(id) {
       }
     );
   }
+}
+
+function printShipping(ordersArray) {
+  const URL = BASE + "/printshipping";
+
+  token = localStorage.getItem("Token");
+
+  const Data = {
+    token: token,
+    orderNos: ordersArray,
+  };
+
+  const otherPram = {
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(Data),
+    method: "PUT",
+  };
+
+  fetch(URL, otherPram)
+    .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
+    .then((res) => {
+      if (ErrorHandling(res)) {
+      }
+      hidespinner();
+      location.reload();
+    })
+    .catch(function (error) {
+      showerror(error);
+      hidespinner();
+    });
 }
