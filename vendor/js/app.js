@@ -1385,10 +1385,8 @@ function createPageTrack(orderno) {
           is_double = true;
         }
         statusnum = getStatusNumbyName(status);
-        console.log(is_double);
-        if (statusnum < 6 && statusnum > 0) {
-          console.log(Shipment);
 
+        if (statusnum < 6 && statusnum > 0) {
           let html = ` <div class="container">
                                         <div class="card">
                                             <div class="d-block titlecard ">
