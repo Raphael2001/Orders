@@ -1379,7 +1379,7 @@ function createPageTrack(orderno) {
         Shipment = res["body"]["body"];
         status = Shipment.ShipmentInfo.Status;
         type = Shipment.ShipmentInfo.Type;
-        console.log(Shipment);
+
         is_double = false;
         if (type == "גוביינא" || type == "כפולה") {
           is_double = true;
