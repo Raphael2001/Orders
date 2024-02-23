@@ -1379,16 +1379,14 @@ function createPageTrack(orderno) {
         Shipment = res["body"]["body"];
         status = Shipment.ShipmentInfo.Status;
         type = Shipment.ShipmentInfo.Type;
-        console.log(type);
+
         is_double = false;
         if (type == "גוביינא" || type == "כפולה") {
           is_double = true;
         }
         statusnum = getStatusNumbyName(status);
-        console.log(is_double);
-        if (statusnum < 6 && statusnum > 0) {
-          console.log(Shipment);
 
+        if (statusnum < 6 && statusnum > 0) {
           let html = ` <div class="container">
                                         <div class="card">
                                             <div class="d-block titlecard ">
@@ -1398,6 +1396,7 @@ function createPageTrack(orderno) {
                                                 <div class="d-flex flex-column text-sm-right" id = "data">
                                                     
                                                         <p class="mt-0 "> נוצר בתאריך: <span>${Shipment.ShipmentInfo.CreateDate}</span></p>                                          
+                                                        <p class="mt-0 "> חברת שילחיות: <span>${Shipment.ShipmentInfo.Distributor.DisplayName}</span></p>                                          
                                                 </div> 
                                              </div>
                                         
