@@ -576,6 +576,8 @@ function createStickers(data) {
   const SHIPMENTINFO = data["ShipmentInfo"];
   const PICKUPPOINT = data["PickUpPoint"];
 
+  const isPickup = SHIPMENTINFO.Distributor.DBName === "איסוף עצמי";
+
   html = ` <div class="sticker-content col-12">
       <div class="text-center">
           <div id="barcode-${SHIPMENTINFO.OrderNo}" class="barcode"
@@ -589,10 +591,7 @@ function createStickers(data) {
       <div class="text-right">
           <p class="d-flex justify-content-between">
           <div class="col" id = "header-${SHIPMENTINFO.OrderNo}">
-              <span class="distributor_text"><strong>נשלח באמצעות: </strong>${
-                SHIPMENTINFO.Distributor.DisplayName
-              }</span>
-              <br>
+            
               <span><strong>מאת: </strong>${PICKUPPOINT.FullName}</span>
               <br>
               <span><strong>טל׳: </strong>${PICKUPPOINT.Phone}</span>
@@ -600,16 +599,16 @@ function createStickers(data) {
 
           </div>
           </p>
-          <div class="p-1 d-flex reciverinfo">
+          <div class="p-1 d-flex reciverinfo" id="reciverinfo">
               <div class="pr-1">
                   <p><strong>שם המקבל: </strong>${DROPOFFPOINT.FullName}</p>
                   <p id = "reciverphone-${
                     SHIPMENTINFO.OrderNo
                   }"><strong>טל׳: </strong> ${DROPOFFPOINT.Phone}</p>
-                  <p><strong>כתובת: </strong>${
-                    DROPOFFPOINT.Address + ", " + DROPOFFPOINT.City
-                  }</p>
-                  <p><strong>סוג: </strong>${SHIPMENTINFO.Type}</p>
+                 
+                  
+                   
+                 
               </div>
           </div>
           <div class="d-flex justify-content-between">
@@ -641,6 +640,25 @@ function createStickers(data) {
     branch_src = document.getElementById(`header-${SHIPMENTINFO.OrderNo}`);
     html = `<span>       <strong>סניף: </strong>${SHIPMENTINFO.Branch}</span>`;
     branch_src.insertAdjacentHTML("beforeend", html);
+  }
+
+  if (!isPickup) {
+    reciverinfo_src = document.getElementById(`reciverinfo`);
+    html = `
+          <p>
+          <strong>כתובת: </strong>${
+            DROPOFFPOINT.Address + ", " + DROPOFFPOINT.City
+          }
+                  </p>
+      <p> 
+          <strong>סוג: </strong>${SHIPMENTINFO.Type}
+      </p>`;
+    reciverinfo_src.insertAdjacentHTML("beforeend", html);
+
+    header_src = document.getElementById(`header-${SHIPMENTINFO.OrderNo}`);
+    html = `  <span class="distributor_text"><strong>נשלח באמצעות: </strong>${SHIPMENTINFO.Distributor.DisplayName}</span>
+              <br>`;
+    header_src.insertAdjacentHTML("afterbegin", html);
   }
   if (SHIPMENTINFO.Distributor.DBName === "MahierLi") {
     generateBarcode(
