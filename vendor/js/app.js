@@ -599,15 +599,12 @@ function createStickers(data) {
 
           </div>
           </p>
-          <div class="p-1 d-flex reciverinfo" id="reciverinfo">
-              <div class="pr-1">
+          <div class="p-1 d-flex reciverinfo" >
+              <div class="pr-1" id="reciverinfo">
                   <p><strong>שם המקבל: </strong>${DROPOFFPOINT.FullName}</p>
                   <p id = "reciverphone-${
                     SHIPMENTINFO.OrderNo
                   }"><strong>טל׳: </strong> ${DROPOFFPOINT.Phone}</p>
-                 
-                  
-                   
                  
               </div>
           </div>
@@ -644,15 +641,9 @@ function createStickers(data) {
 
   if (!isPickup) {
     reciverinfo_src = document.getElementById(`reciverinfo`);
-    html = `
-          <p>
-          <strong>כתובת: </strong>${
-            DROPOFFPOINT.Address + ", " + DROPOFFPOINT.City
-          }
-                  </p>
-      <p> 
-          <strong>סוג: </strong>${SHIPMENTINFO.Type}
-      </p>`;
+    html = `<p><strong>כתובת: </strong>${
+      DROPOFFPOINT.Address + ", " + DROPOFFPOINT.City
+    }</p>`;
     reciverinfo_src.insertAdjacentHTML("beforeend", html);
 
     header_src = document.getElementById(`header-${SHIPMENTINFO.OrderNo}`);
