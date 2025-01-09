@@ -1,6 +1,6 @@
 const INACTIVE_USER_TIME_THRESHOLD = 6000000; // 60 min - a.k.a 1 hour
 const USER_ACTIVITY_THROTTLER_TIME = 60000;
-const BASE = "https://shipping360-cukp6uab4a-uc.a.run.app/api/v1";
+const BASE = "https://api-shipping360.aboohi.net/api/v1";
 const loginpageulr = "login.html";
 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 const just_to_target_list = ["Cheeta", "HFD"];
