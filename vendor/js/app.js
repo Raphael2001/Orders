@@ -920,8 +920,8 @@ function createCompany() {
   const companyPhone = document.getElementById("companyphone").value;
   const companyComment = document.getElementById("companycomment").value;
   const userfullname = document.getElementById("userfullname").value;
-  const Email = localStorage.getItem("Mail");
-  const UID = localStorage.getItem("Token");
+  const email = localStorage.getItem("Mail");
+  const password = localStorage.getItem("password");
 
   const Data = {
     companyName: companyName,
@@ -930,8 +930,8 @@ function createCompany() {
     companyPhone: companyPhone,
     companyComment: companyComment,
     userfullname: userfullname,
-    email: Email,
-    token: UID,
+    email: email,
+    password: password,
   };
 
   const otherPram = {
@@ -941,22 +941,21 @@ function createCompany() {
     body: JSON.stringify(Data),
     method: "POST",
   };
-  console.log(URL);
+
   fetch(URL, otherPram)
     .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
     .then((res) => {
       if (ErrorHandling(res));
       {
-        id = res["body"]["body"];
-        console.log("New Company Created " + id);
-        getCompanybyUsersEmail(
-          localStorage.getItem("Mail"),
-          localStorage.getItem("Token"),
-          true
-        );
+        const body = res["body"]["body"];
+
+        const { token } = body;
+
+        localStorage.setItem("Token", token);
+
+        getCompanybyUsersEmail(email, token, true);
         clearformbyclassname("company");
-        analytics.logEvent("New Company Created", { companyid: id });
-        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
+        localStorage.removeItem("password");
       }
       hidespinner();
     })
@@ -964,7 +963,6 @@ function createCompany() {
       showerror(error);
       hidespinner();
     });
-  // clearFormCompany();
 }
 
 function clearFormCompany() {
@@ -977,9 +975,6 @@ function clearFormCompany() {
 }
 
 function newuser() {
-  // creates a new user
-  const URL = BASE + "/createuser";
-
   const userEmail = document.getElementById("new-email").value;
   const user_elem_Password = document.getElementById("new-password");
   const userPassword = user_elem_Password.value;
@@ -987,37 +982,11 @@ function newuser() {
 
   if (checkPassword(userPassword)) {
     showspinner();
-    const Data = {
-      email: userEmail,
-      password: userPassword,
-    };
 
-    const otherPram = {
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(Data),
-      method: "POST",
-    };
-    console.log(URL);
-    fetch(URL, otherPram)
-      .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
-      .then((res) => {
-        if (ErrorHandling(res)) {
-          localStorage.setItem("email", userEmail);
-          localStorage.setItem("uid", res["body"]["body"]);
-          window.open("createcompany.html?fullname=" + userFullname, "_self");
-          analytics.logEvent("new user is created", {
-            email: localStorage.getItem("Mail"),
-          });
-          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
-        }
-        hidespinner();
-      })
-      .catch(function (error) {
-        showerror(error);
-        alert("Email or Password are wrong");
-      });
+    localStorage.setItem("Mail", userEmail);
+    localStorage.setItem("password", userPassword);
+
+    window.open("createcompany.html?fullname=" + userFullname, "_self");
   } else {
     showpopup("modalerror");
     user_elem_Password.focus();
