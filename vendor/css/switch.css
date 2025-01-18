@@ -1,0 +1,48 @@
+:root {
+  --toggle-width: 60px; /* Adjust this to change the size dynamically */
+  --toggle-height: calc(var(--toggle-width) / 2);
+  --knob-size: calc(var(--toggle-height) - 10px);
+  --knob-offset: 5px;
+}
+
+.switch {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.switch + label {
+  cursor: pointer;
+
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  background: grey;
+
+  border-radius: var(--toggle-height);
+  position: relative;
+}
+
+.switch + label:after {
+  content: "";
+  position: absolute;
+  top: var(--knob-offset);
+  left: var(--knob-offset);
+  width: var(--knob-size);
+  height: var(--knob-size);
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch:checked + label {
+  background: var(--color-primary);
+}
+
+.switch:checked + label:after {
+  left: calc(100% - var(--knob-offset));
+  transform: translateX(-100%);
+}
+
+.switch + label:active:after {
+  width: calc(var(--knob-size) + 10px); /* Slightly larger for active state */
+}

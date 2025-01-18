@@ -17,6 +17,7 @@
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="vendor/datatimepicker/daterangepicker.css" />
     <link rel="stylesheet" href="vendor/css/style.css" type="text/css">
+    <link rel="stylesheet" href="vendor/css/switch.css" type="text/css">
     <link rel="shortcut icon" type="image/x-icon" href="img/favico.ico" />
 
 
@@ -124,16 +125,23 @@
                                 <section id="orders">
 
 
+                                    <div class="orders-actions">
 
-                                    <button class="btn btn-primary printorders" onclick="tableToExcel()">
-                                        <i class='bx bxs-file-import'></i> הוצאה לאקסל
-                                    </button>
-                                    <button class="btn btn-primary btn_submit" id="btn_submit"
-                                        onclick="showpopup('ChoosePrintingType')"><span class='bx bx-printer'></span>
-                                        הדפסה</button>
-                                    <button class="btn btn-primary btn_update" id="btn_update"><span
-                                            class='bx bx-cloud-upload'></span> עדכן רשומות</button>
-
+                                        <button class="btn btn-primary printorders" onclick="tableToExcel()">
+                                            <i class='bx bxs-file-import'></i> הוצאה לאקסל
+                                        </button>
+                                        <button class="btn btn-primary btn_submit" id="btn_submit"
+                                            onclick="showpopup('ChoosePrintingType')"><span
+                                                class='bx bx-printer'></span>
+                                            הדפסה</button>
+                                        <button class="btn btn-primary btn_update" id="btn_update"><span
+                                                class='bx bx-cloud-upload'></span> עדכן רשומות</button>
+                                        <div class="printed-switch">
+                                            <label class="printed-label">הודפס</label>
+                                            <input class="switch" type="checkbox" id="printed-switch" /><label
+                                                for="printed-switch"></label>
+                                        </div>
+                                    </div>
                                     <table class="orderstable" id="orderstable">
                                         <thead>
                                             <tr>
@@ -422,8 +430,8 @@
     <script type="text/javascript" src="vendor/datatimepicker/moment.min.js"></script>
     <script type="text/javascript" src="vendor/datatimepicker/daterangepicker.js"></script>
     <script src="vendor/datetimepickeri18n/jquery.datetimepicker.full.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
+
     <script type="text/javascript " src="vendor/js/main.js"></script>
     <script type="text/javascript " src="vendor/js/app.js"></script>
 
@@ -431,9 +439,9 @@
     <script>
 
         window.onload = checkuser();
-        window.onload = localStorage.setItem("lastid", 0);
 
-        analytics.logEvent('A new Entry in Orders Summary page');
+
+
 
         window.onload = adddistributor();
         function adddistributor() {
@@ -467,10 +475,12 @@
             }
         }
 
-        window.onload = loaddata();
+        window.onload = loaddata(1);
 
         $('.dropdown').dropdown();
         $('.dropdown .text').text('בחר מפיצים');
+
+
 
 
         jQuery('.datetimepickeri18n').datetimepicker();
@@ -485,7 +495,11 @@
         $(function () {
             $("#btn_showmore").on('click', function () {
 
-                loaddata();
+                loaddata(localStorage.getItem("page"));
+
+            });
+            document.getElementById("printed-switch").addEventListener("change", function (e) {
+                window.onload = loaddata(1);
 
             });
 
@@ -517,7 +531,6 @@
             $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
                 datefrom = picker.startDate.format('YYYY-MM-DD');
                 dateto = picker.endDate.format('YYYY-MM-DD');
-                // loaddatabydateandorderno(datefrom, dateto, "");
                 filterby();
             });
 
@@ -591,12 +604,7 @@
             else {
                 document.getElementById("btn_submit").removeAttribute('disabled');
                 document.getElementById("btn_update").removeAttribute('disabled');
-
-
-
             }
-
-
         }
 
         function filterby() {
@@ -612,10 +620,10 @@
             }
 
             if ((datefrom == dateto) && (datefrom == today)) {
-                loaddatabydateordernoanddistributors("", "", orderno, distributors);
+                loaddata("", "", orderno, distributors);
             }
             else {
-                loaddatabydateordernoanddistributors(datefrom, dateto, orderno, distributors);
+                loaddata(datefrom, dateto, orderno, distributors);
             }
         }
 

@@ -49,16 +49,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="vendor/jquery/jquery-barcode.js"></script>
-
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
-
     <script type="text/javascript " src="vendor/js/main.js"></script>
     <script type="text/javascript " src="vendor/js/app.js"></script>
 
     <script>
-        analytics.logEvent('A new Entry in A4 page');
-
         window.onload = checkuser();
         window.onload = createPagePrint(createA4);
         window.onload = function () { window.print(); }

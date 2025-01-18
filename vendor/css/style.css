@@ -407,12 +407,7 @@ button.changedir:hover {
   margin: 0 auto;
   float: left;
 }
-.printorders,
-.btn_submit,
-.btn_update {
-  float: right;
-  margin: 0 5px 10px 5px;
-}
+
 .btn_showmore {
   align-items: center !important;
   align-self: center !important;
@@ -424,6 +419,21 @@ button.changedir:hover {
   margin-bottom: 50px;
 }
 
+.orders-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.printed-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.printed-label {
+  font-size: 20px;
+  font-weight: 900;
+}
 #orders {
   margin-top: 50px;
   margin-left: auto;

@@ -127,7 +127,8 @@
                                     <div class="modal-small">
                                         <span class="close" onclick="closepopup('NewFav')">&times;</span>
                                         <p>נוצרה כתובת מעודפת חדשה</p>
-                                        <button class="btn" onclick='window.open("favorites.html", "_self");'>אישור</button>
+                                        <button class="btn"
+                                            onclick='window.open("favorites.html", "_self");'>אישור</button>
 
                                     </div>
 
@@ -150,16 +151,12 @@
     <script src="vendor/js/popper.min.js"></script>
     <script src="vendor/js/material-dashboard.js"></script>
     <script src="vendor/js/bootstrap-material-design.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
-
     <script type="text/javascript " src="vendor/js/main.js"></script>
     <script type="text/javascript " src="vendor/js/app.js"></script>
     <script>
 
         window.onload = checkuser();
 
-        analytics.logEvent('A new Entry in AddFavorite page');
 
         const formcreatedelivery = document.getElementById("formaddfav");
         formcreatedelivery.addEventListener("submit", (e) => {

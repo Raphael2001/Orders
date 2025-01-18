@@ -162,12 +162,25 @@ function loadsidebar() {
 
 function inactiveUserAction() {
   // logout logic
-  analytics.logEvent("user is automatically loged out", {
-    email: localStorage.getItem("Mail"),
-  });
-  analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
   signout();
+}
+
+function buildGetUrl(endPoint, params) {
+  const url = `${BASE}${endPoint}`;
+  // Filter out parameters with empty string values
+  const queryParams = Object.entries(params)
+    .filter(([key, value]) => value !== "")
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join("&");
+
+  // Construct the final URL with query parameters
+  const finalURL = queryParams ? `${url}?${queryParams}` : url;
+
+  return finalURL;
 }
 
 function getusernamefromlocalStorage() {
@@ -281,8 +294,6 @@ function createDelivery() {
           document.getElementById("moneycollect").value = "";
           putCompanyDeatials_trigger("sender");
           // location.reload();
-          analytics.logEvent("New Delivery Created", { OrderNumber: orderNo });
-          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
         })
         .catch(function (error) {
           console.log(error);
@@ -404,23 +415,32 @@ function clearformdelivery() {
   document.getElementById("receivercomment").value = "";
 }
 
-function loaddata() {
+function loaddata(
+  page = 1,
+  datefrom = "",
+  dateto = "",
+  orderNo = "",
+  distributors = ""
+) {
   // load data and put it in a table
   showspinner();
   hideemptyimg();
-  lastid = localStorage.getItem("lastid");
-  compnayId = getCompanyID();
-  uid = localStorage.getItem("Token");
-  const URL =
-    BASE +
-    "/shipping?lastid=" +
-    lastid +
-    "&recordsnumtoshow=" +
-    tablerecordsnumtoshow +
-    "&companyid=" +
-    compnayId +
-    "&token=" +
-    uid;
+
+  const printedSwitch = document.getElementById("printed-switch");
+  const printed = printedSwitch?.checked ?? false;
+
+  const token = localStorage.getItem("Token");
+
+  const params = {
+    from: datefrom,
+    to: dateto,
+    orderNo: orderNo,
+    distributors: distributors,
+    printed: printed,
+    token: token,
+    page: page,
+  };
+  const URL = buildGetUrl("/shipping", params);
 
   const otherPram = {
     headers: {
@@ -429,21 +449,27 @@ function loaddata() {
     method: "GET",
   };
 
-  console.log(URL);
-
   fetch(URL, otherPram)
     .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
     .then((res) => {
       if (ErrorHandling(res)) {
-        last_id = res["body"]["message"];
-        if (last_id == -1) {
+        const body = res["body"]["body"];
+        const { data, isLastPage } = body;
+
+        const nextPage = Number(page) + 1;
+        localStorage.setItem("page", nextPage);
+
+        if (isLastPage) {
           document.getElementById("btn_showmore").style = "visibility: hidden;";
         }
-        localStorage.setItem("lastid", last_id);
-        data = res["body"]["body"];
-        if (Object.keys(res).length === 0 && res.constructor === Object) {
-          // checking if empty
+
+        if (!Object.keys(data).length) {
           showemptyimg();
+        }
+
+        if (page === 1) {
+          const src = document.getElementById("tbody");
+          src.innerHTML = "";
         }
 
         for (var key in data) {
@@ -451,80 +477,6 @@ function loaddata() {
           if (data.hasOwnProperty(key)) {
             localStorage.setItem(key, JSON.stringify(data[key]));
             createtable(data[key]);
-          }
-        }
-      }
-      hidespinner();
-    })
-    .catch(function (error) {
-      showerror(error);
-      hidespinner();
-    });
-}
-
-function loaddatabydateordernoanddistributors(
-  datefrom,
-  dateto,
-  orderno,
-  distributors
-) {
-  showspinner();
-  hideemptyimg();
-  document.getElementById("tbody").innerHTML = "";
-  var btn = document.getElementById("btn_showmore");
-  btn.css = "visibility: visible;";
-  btn.innerHTML = "אפס";
-  $("#btn_showmore").on("click", function () {
-    // document.getElementById("tbody").innerHTML = "";
-    // localStorage.setItem("lastid", 0);
-    // btn.innerHTML = "הצג עוד";
-    location.reload();
-  });
-
-  compnayId = getCompanyID();
-  uid = localStorage.getItem("Token");
-  lastid = localStorage.getItem("lastid");
-  console.log(distributors);
-  const URL =
-    BASE +
-    "/getshippingbydatesordernoanddistributors?from=" +
-    datefrom +
-    "&to=" +
-    dateto +
-    "&orderno=" +
-    orderno +
-    "&distributors=" +
-    "[" +
-    distributors +
-    "]" +
-    "&companyid=" +
-    compnayId +
-    "&token=" +
-    uid;
-
-  const otherPram = {
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
-    method: "GET",
-  };
-  console.log(URL);
-  fetch(URL, otherPram)
-    .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
-    .then((res) => {
-      if (ErrorHandling(res)) {
-        res = res["body"]["body"];
-
-        if (Object.keys(res).length === 0 && res.constructor === Object) {
-          // checking if empty
-          showemptyimg();
-        }
-        for (var key in res) {
-          // check if the property/key is defined in the object itself, not in parent
-          if (res.hasOwnProperty(key)) {
-            shipment = res[key];
-            localStorage.setItem(key, JSON.stringify(shipment));
-            createtable(shipment);
           }
         }
       }
@@ -1028,8 +980,6 @@ function login() {
 
         uid = localStorage.getItem("Token");
         getCompanybyUsersEmail(localStorage.getItem("Mail"), uid, true);
-        analytics.logEvent("login", { method: "Email", UID: uid });
-        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
         console.log(localStorage.getItem("Mail"));
       } else {
@@ -1691,11 +1641,6 @@ function adddistributorttocompany() {
           Company["Distributors"][distributors[key].DBName] = distributors[key];
         }
         localStorage.setItem("Company", JSON.stringify(Company));
-        analytics.logEvent("a distributor is add", {
-          email: localStorage.getItem("Mail"),
-          DBName: distributors[key].DBName,
-        });
-        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
 
         window.open("myconnections.html", "_self");
       }
@@ -1944,11 +1889,6 @@ function addusertocompany() {
           document.getElementById("modal-usermail").innerHTML = user_email;
           document.getElementById("modal-userpassword").innerHTML =
             user_password;
-          analytics.logEvent("a new user is created", {
-            email: user_email,
-            Fullname: user.Fullname,
-          });
-          analytics.setUserProperties({ UID: user.Token });
         }
         hidespinner();
       })
@@ -2024,11 +1964,6 @@ function addfavorite(favoritedata) {
         favorite_response = res["body"]["body"];
         console.log(favorite_response);
         setfavoriteinuser(favorite_response);
-        analytics.logEvent("a new favorite is created", {
-          email: localStorage.getItem("Mail"),
-          favid: favorite_response.Id,
-        });
-        analytics.setUserProperties({ UID: localStorage.getItem("Token") });
       }
       hidespinner();
     })
@@ -2198,11 +2133,6 @@ function deleteuser(token) {
           }
 
           localStorage.setItem("Company", JSON.stringify(company));
-
-          analytics.logEvent("a user is been deleted", {
-            email: localStorage.getItem("Mail"),
-          });
-          analytics.setUserProperties({ UID: token });
         }
         hidespinner();
         location.reload();
@@ -2248,10 +2178,6 @@ function deletefavorite(id) {
         }
         localStorage.setItem("User", JSON.stringify(user));
 
-        analytics.logEvent("a favorite is been deleted", {
-          email: localStorage.getItem("Mail"),
-        });
-        analytics.setUserProperties({ UID: token });
         location.reload();
       }
       hidespinner();
@@ -2310,12 +2236,6 @@ function addcustomdistributorttocompany() {
           showpopup("modaldistributor");
           document.getElementById("modal-username").innerHTML = username;
           document.getElementById("modal-password").innerHTML = password;
-
-          analytics.logEvent("a new distributor is add", {
-            email: localStorage.getItem("Mail"),
-            DBName: distributor_name,
-          });
-          analytics.setUserProperties({ UID: localStorage.getItem("Token") });
         }
         hidespinner();
       })
@@ -2393,11 +2313,6 @@ function updateuser() {
         localStorage.setItem("User", JSON.stringify(user));
 
         localStorage.setItem("Company", JSON.stringify(company));
-
-        analytics.logEvent("a user is been updated", {
-          email: localStorage.getItem("Mail"),
-        });
-        analytics.setUserProperties({ UID: token });
       }
       hidespinner();
       window.open("mydetails.html", "_self");
@@ -2451,11 +2366,6 @@ function updateCompany() {
         company.CompanyStreet = street;
 
         localStorage.setItem("Company", JSON.stringify(company));
-
-        analytics.logEvent("a company is been updated", {
-          email: localStorage.getItem("Mail"),
-        });
-        analytics.setUserProperties({ UID: token });
       }
       hidespinner();
       window.open("mydetails.html", "_self");
