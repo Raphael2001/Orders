@@ -1,6 +1,7 @@
 const INACTIVE_USER_TIME_THRESHOLD = 6000000; // 60 min - a.k.a 1 hour
 const USER_ACTIVITY_THROTTLER_TIME = 60000;
-const BASE = "https://api-shipping360.aboohi.net/api/v1";
+// const BASE = "https://api-shipping360.aboohi.net/api/v1";
+const BASE = "http://127.0.0.1:8080/api/v1";
 const loginpageulr = "login.html";
 const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 const just_to_target_list = ["Cheeta", "HFD"];
@@ -20,20 +21,6 @@ var today = new Date(y, m, d).toISOString();
 lastDay = getDatefromDatetimestring(lastDay);
 firstDay = getDatefromDatetimestring(firstDay);
 today = getDatefromDatetimestring(today);
-// For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
-
-var firebaseConfig = {
-  apiKey: "AIzaSyDraVDl5Q483XR1DnWO-WjWV5_OPd2a8-g",
-  authDomain: "orders-1f4fb.firebaseapp.com",
-  projectId: "orders-1f4fb",
-  storageBucket: "orders-1f4fb.appspot.com",
-  messagingSenderId: "549327547136",
-  appId: "1:549327547136:web:4d97d76c02b8450e77e1e5",
-  measurementId: "G-X1CZNWMHVP",
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics();
 
 let userActivityTimeout = null;
 let userActivityThrottlerTimeout = null;
@@ -74,12 +61,6 @@ function userActivityThrottler() {
 }
 
 function signout() {
-  //sign out the user
-  analytics.logEvent("user is log out", {
-    email: localStorage.getItem("Mail"),
-    UID: localStorage.getItem("Token"),
-  });
-
   window.open(loginpageulr, "_self");
   localStorage.clear();
 }

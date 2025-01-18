@@ -141,15 +141,12 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/js/popper.min.js"></script>
     <script src="vendor/js/material-dashboard.js"></script>
-    <script src="vendor/js/bootstrap-material-design.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+
     <script type="text/javascript " src="vendor/js/main.js"></script>
     <script type="text/javascript " src="vendor/js/app.js"></script>
     <script>
         window.onload = checkuser();
 
-        analytics.logEvent('A new Entry in Create User page');
         const form_create = document.getElementById("form_create_user");
         form_create.addEventListener("submit", (e) => {
             e.preventDefault();
