@@ -1635,13 +1635,8 @@ function adddistributorttocompany() {
     .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
     .then((res) => {
       if (ErrorHandling(res)) {
-        distributors = res["body"]["body"];
-        Company = getcurrentCompany();
-        for (key in distributors) {
-          Company["Distributors"][distributors[key].DBName] = distributors[key];
-        }
-        localStorage.setItem("Company", JSON.stringify(Company));
-
+        const company = res["body"]["body"]["company"];
+        localStorage.setItem("Company", JSON.stringify(company));
         window.open("myconnections.html", "_self");
       }
     })
