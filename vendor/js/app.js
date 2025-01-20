@@ -2523,10 +2523,7 @@ function printShipping(ordersArray) {
   fetch(URL, otherPram)
     .then((r) => r.json().then((data) => ({ status: r.status, body: data })))
     .then((res) => {
-      if (ErrorHandling(res)) {
-      }
       hidespinner();
-      location.reload();
     })
     .catch(function (error) {
       showerror(error);
