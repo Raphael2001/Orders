@@ -565,7 +565,7 @@ function createStickers(data) {
                 DROPOFFPOINT.Comment
               }</p>
               <div class="text-left"><img
-                      src="https://firebasestorage.googleapis.com/v0/b/orders-1f4fb.appspot.com/o/%D7%A1%D7%9E%D7%9C%20%D7%A8%D7%A4%D7%95%D7%90%D7%94%20%D7%95%D7%98%D7%91%D7%A2.png?alt=media&amp;token=6c23c93f-31b7-41b4-a734-ead364d45d91"
+                      src="https://raphael.aboohi.net/favicon.ico"
                       width="45" height="45"></div>
           </div>
       </div>
