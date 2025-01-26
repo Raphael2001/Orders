@@ -304,11 +304,11 @@ function clearselction() {
 function getCheckedBoxs() {
   // get all the selected checkbox
   var array = [];
-  var checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
+  var checkboxes = document.querySelectorAll(
+    "#tbody input[type=checkbox]:checked"
+  );
   for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].id != "check-all") {
-      array.push(checkboxes[i].value);
-    }
+    array.push(checkboxes[i].value);
   }
   return array;
 }
