@@ -155,12 +155,9 @@ button.changedir:hover {
 }
 
 .image-empty {
-  display: none;
   margin-top: 70px;
   width: 70%;
   transform: translateX(-20%);
-  transition: transform 0.8s ease-in-out;
-  transition-delay: 0.4s;
 }
 @media (max-width: 590px) {
   .image-empty {
@@ -408,15 +405,12 @@ button.changedir:hover {
   float: left;
 }
 
-.btn_showmore {
-  align-items: center !important;
-  align-self: center !important;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
 .showmore {
   margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .orders-actions {
@@ -1054,10 +1048,13 @@ th {
 .show {
   display: block !important;
 }
+.hide {
+  display: none;
+  pointer-events: none;
+}
 
 /* distributor settings */
 
-.btn_showmore,
 .btn_update_dis {
   align-items: center !important;
   align-self: center !important;

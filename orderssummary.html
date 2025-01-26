@@ -108,24 +108,26 @@
 
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12">
-                                            <button class="btn btn-search" onclick="filterby()">חפש</button>
+                                            <button class="btn btn-search" onclick="filterData(1)">חפש</button>
 
                                         </div>
-
-
-
-
-
 
                                     </div>
 
 
                                 </section>
 
+
+
+                                <div>
+                                    <img class="image-empty hide" id="image-empty" src="img/empty.svg" alt="אין תוצאות">
+
+                                </div>
+
                                 <section id="orders">
 
 
-                                    <div class="orders-actions">
+                                    <div class="orders-actions" id="order-actions">
 
                                         <button class="btn btn-primary printorders" onclick="tableToExcel()">
                                             <i class='bx bxs-file-import'></i> הוצאה לאקסל
@@ -166,15 +168,16 @@
 
 
 
+
+
                                     <div class="showmore">
-                                        <button type="button" class="btn btn_showmore" id="btn_showmore">הצג
+                                        <button type="button" class="btn" id="btn_showmore">הצג
                                             עוד</button>
+                                        <button type="button" class="btn hide" id="btn_reset">איפוס
+                                            פילטורים
+                                        </button>
                                     </div>
                                 </section>
-                                <div>
-                                    <img class="image-empty" id="image-empty" src="img/empty.svg" alt="אין תוצאות">
-
-                                </div>
 
                             </div>
 
@@ -412,11 +415,6 @@
 
     </div>
 
-
-
-
-
-
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/js/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
@@ -439,9 +437,6 @@
     <script>
 
         window.onload = checkuser();
-
-
-
 
         window.onload = adddistributor();
         function adddistributor() {
@@ -480,12 +475,8 @@
         $('.dropdown').dropdown();
         $('.dropdown .text').text('בחר מפיצים');
 
-
-
-
         jQuery('.datetimepickeri18n').datetimepicker();
         jQuery.datetimepicker.setLocale('he');
-
 
         jQuery('.datetimepickeri18n').datetimepicker({
             timepicker: false,
@@ -494,23 +485,40 @@
 
         $(function () {
             $("#btn_showmore").on('click', function () {
-
-                loaddata(localStorage.getItem("page"));
-
+                filterData()
             });
+
+            $("#btn_reset").on('click', function () {
+                location.reload()
+            });
+
+
+
             document.getElementById("printed-switch").addEventListener("change", function (e) {
-                window.onload = loaddata(1);
-
+                window.onload = filterData(1)
             });
 
-            var start = moment().subtract(0, 'days');
-            var end = moment();
+            resetDatePicker();
 
 
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                filterData(1)
+            });
+
+
+
+        });
+
+
+        function resetDatePicker() {
             function cb(start, end) {
                 $('#reportrange span').html('  מ -  ' + start.format('YYYY-MM-DD') + '  עד -   ' + end.format('YYYY-MM-DD'));
 
             }
+
+            const start = moment().subtract(0, 'days');
+            const end = moment();
+
 
             $('#reportrange').daterangepicker({
                 opens: 'center',
@@ -527,17 +535,9 @@
                     'חודש קודם': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 }
             }, cb);
-
-            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-                datefrom = picker.startDate.format('YYYY-MM-DD');
-                dateto = picker.endDate.format('YYYY-MM-DD');
-                filterby();
-            });
-
-
             cb(start, end);
 
-        });
+        }
 
         document.getElementById('btn_update').addEventListener("click", function () {
             document.querySelector('.bg-modal').style.display = "flex";
@@ -547,6 +547,30 @@
 
 
         });
+
+        function filterData(overridePage = null) {
+            // Get the date range picker instance
+            const picker = $('#reportrange').data('daterangepicker');
+
+            // Determine the page to load
+            const page = overridePage || localStorage.getItem("page");
+
+            // Get the order number input and convert it to uppercase
+            const orderNo = document.getElementById("orderno-search").value.trim().toUpperCase();
+
+            // Extract the start and end dates from the picker
+            const dateFrom = picker.startDate.format('YYYY-MM-DD');
+            const dateTo = picker.endDate.format('YYYY-MM-DD');
+
+            // Get today's date and format it
+            const today = getDatefromDatetimestring(new Date().toISOString());
+
+            // Retrieve selected distributors or set as empty string if none are selected
+            const distributors = getseleceteddistributors().length ? getseleceteddistributors() : "";
+
+
+            loaddata(page, dateFrom, dateTo, orderNo, distributors);
+        }
 
 
         var modal = document.querySelector('.order-model');
@@ -607,26 +631,6 @@
             }
         }
 
-        function filterby() {
-            var picker = $('#reportrange').data('daterangepicker');
-            orderno = document.getElementById("orderno-search").value.toUpperCase();
-            datefrom = picker.startDate.format('YYYY-MM-DD');
-            dateto = picker.endDate.format('YYYY-MM-DD');
-            var today = new Date(y, m, d).toISOString();
-            today = getDatefromDatetimestring(today);
-            distributors = getseleceteddistributors()
-            if (distributors == []) {
-                distributors = ""
-            }
-
-            if ((datefrom == dateto) && (datefrom == today)) {
-                loaddata("", "", orderno, distributors);
-            }
-            else {
-                loaddata(datefrom, dateto, orderno, distributors);
-            }
-        }
-
         function printingtype(desired_type) {
             array = getCheckedBoxs();
             printShipping(array)
@@ -636,10 +640,9 @@
         }
 
 
-
-
         function getseleceteddistributors() {
             var src = document.getElementById("distributor");
+
             distributors = src.children
 
             choosen = []
@@ -652,6 +655,7 @@
             return choosen;
 
         }
+
 
 
 

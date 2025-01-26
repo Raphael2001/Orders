@@ -424,7 +424,7 @@ function loaddata(
 ) {
   // load data and put it in a table
   showspinner();
-  hideemptyimg();
+  switchEmptyState(false);
 
   const printedSwitch = document.getElementById("printed-switch");
   const printed = printedSwitch?.checked ?? false;
@@ -460,11 +460,11 @@ function loaddata(
         localStorage.setItem("page", nextPage);
 
         if (isLastPage) {
-          document.getElementById("btn_showmore").style = "visibility: hidden;";
+          document.getElementById("btn_showmore").classList.add("hide");
         }
 
         if (!Object.keys(data).length) {
-          showemptyimg();
+          switchEmptyState(true);
         }
 
         if (page === 1) {

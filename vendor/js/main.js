@@ -203,16 +203,23 @@ function putOrderDeatails(data) {
   document.getElementById("ordertype").innerHTML = SHIPMENTINFO.Type;
 }
 
-function showemptyimg() {
-  document.getElementById("image-empty").style.display = "block";
-  document.getElementById("btn_showmore").style.display = "none";
-  document.getElementById("orders").style.display = "none";
-}
+function switchEmptyState(isEmpty) {
+  const elementsToToggle = [
+    { id: "image-empty", showOnEmpty: true },
+    { id: "btn_reset", showOnEmpty: true },
+    { id: "order-actions", showOnEmpty: false },
+    { id: "orderstable", showOnEmpty: false },
+    { id: "btn_showmore", showOnEmpty: false },
+  ];
 
-function hideemptyimg() {
-  document.getElementById("image-empty").style.display = "none";
-  document.getElementById("btn_showmore").style.display = "block";
-  document.getElementById("orders").style.display = "block";
+  elementsToToggle.forEach(({ id, showOnEmpty }) => {
+    const element = document.getElementById(id);
+    if (isEmpty === showOnEmpty) {
+      element.classList.remove("hide");
+    } else {
+      element.classList.add("hide");
+    }
+  });
 }
 
 function sortTable(n) {

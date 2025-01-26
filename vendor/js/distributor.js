@@ -180,7 +180,7 @@ function updatedata() {
 function loaddata() {
   // load data and put it in a table
   showspinner();
-  hideemptyimg();
+  switchEmptyState(false);
 
   lastid = localStorage.getItem("lastid");
   compnayId = localStorage.getItem("CompanyId");
@@ -222,7 +222,7 @@ function loaddata() {
         data = res["body"]["body"];
         if (Object.keys(res).length === 0 && res.constructor === Object) {
           // checking if empty
-          showemptyimg();
+          switchEmptyState(true);
         }
 
         for (var key in data) {
@@ -287,7 +287,7 @@ function moreDetails(event) {
 function loaddatabydate(datefrom, dateto) {
   // load data between dates and put it in a table
   showspinner();
-  hideemptyimg();
+  switchEmptyState(false);
   document.getElementById("tbody").innerHTML = "";
   var btn = document.getElementById("btn_showmore");
   btn.css = "visibility: visible;";
@@ -333,7 +333,7 @@ function loaddatabydate(datefrom, dateto) {
 
         if (Object.keys(res).length === 0 && res.constructor === Object) {
           // checking if empty
-          showemptyimg();
+          switchEmptyState(true);
         }
 
         for (var key in res) {
@@ -586,7 +586,7 @@ function convertbloburltobase64(bloburl) {
 function ResizeImage() {
   var filesToUpload = document.getElementById("imageFile").files;
   var file = filesToUpload[0];
-  console.log(file)
+  console.log(file);
 
   // Create an image
   var img = document.createElement("img");
@@ -623,7 +623,7 @@ function ResizeImage() {
     ctx.drawImage(img, 0, 0, width, height);
 
     var dataurl = canvas.toDataURL("image/png, image/jpg");
-    console.log(dataurl)
+    console.log(dataurl);
     document.getElementById("output").src = dataurl;
   };
   // Load files into file reader
