@@ -666,10 +666,10 @@ th {
 #printcontainer {
   margin: 0 auto;
   width: 100%;
-  font-size: x-large;
+  font-size: medium;
 }
 .distributor_text {
-  font-size: 22px;
+  font-size: medium;
 }
 .sticker-content {
   margin-top: 0px;

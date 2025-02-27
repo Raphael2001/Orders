@@ -541,16 +541,12 @@ function createStickers(data) {
       </div>
 
       <div class="text-right">
-          <p class="d-flex justify-content-between">
           <div class="col" id = "header-${SHIPMENTINFO.OrderNo}">
             
               <span><strong>מאת: </strong>${PICKUPPOINT.FullName}</span>
               <br>
               <span><strong>טל׳: </strong>${PICKUPPOINT.Phone}</span>
-             
-
           </div>
-          </p>
           <div class="p-1 d-flex reciverinfo" >
               <div class="pr-1" id="reciverinfo">
                   <p><strong>שם המקבל: </strong>${DROPOFFPOINT.FullName}</p>
