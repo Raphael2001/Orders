@@ -480,6 +480,7 @@
 
         jQuery('.datetimepickeri18n').datetimepicker({
             timepicker: false,
+
             format: 'Y-m-d'
         });
 
@@ -498,32 +499,13 @@
                 window.onload = filterData(1)
             });
 
-            resetDatePicker();
-
-
-            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
-                filterData(1)
-            });
-
-
-
-        });
-
-
-        function resetDatePicker() {
-            function cb(start, end) {
-                $('#reportrange span').html('  מ -  ' + start.format('YYYY-MM-DD') + '  עד -   ' + end.format('YYYY-MM-DD'));
-
-            }
-
-            const start = moment().subtract(0, 'days');
-            const end = moment();
-
-
             $('#reportrange').daterangepicker({
+                autoUpdateInput: false,
                 opens: 'center',
-                startDate: start,
-                endDate: end,
+                startDate: moment(),
+                endDate: moment(),
+
+
                 showCustomRangeLabel: false,
                 alwaysShowCalendars: true,
                 ranges: {
@@ -534,10 +516,17 @@
                     'החודש הזה': [moment().startOf('month'), moment().endOf('month')],
                     'חודש קודם': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 }
-            }, cb);
-            cb(start, end);
+            });
 
-        }
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                $(this).find('span').html(' מ - ' + picker.startDate.format('YYYY-MM-DD') + ' עד - ' + picker.endDate.format('YYYY-MM-DD'));
+                filterData(1)
+            });
+
+
+
+        });
+
 
         document.getElementById('btn_update').addEventListener("click", function () {
             document.querySelector('.bg-modal').style.display = "flex";
@@ -552,6 +541,13 @@
             // Get the date range picker instance
             const picker = $('#reportrange').data('daterangepicker');
 
+
+
+            const displaySpan = $('#reportrange span').text().trim();
+            console.log("displaySpan", displaySpan);
+
+
+
             // Determine the page to load
             const page = overridePage || localStorage.getItem("page");
 
@@ -559,8 +555,8 @@
             const orderNo = document.getElementById("orderno-search").value.trim().toUpperCase();
 
             // Extract the start and end dates from the picker
-            const dateFrom = picker.startDate.format('YYYY-MM-DD');
-            const dateTo = picker.endDate.format('YYYY-MM-DD');
+            const dateFrom = displaySpan ? picker.startDate.format('YYYY-MM-DD') : "";
+            const dateTo = displaySpan ? picker.endDate.format('YYYY-MM-DD') : "";
 
             // Get today's date and format it
             const today = getDatefromDatetimestring(new Date().toISOString());
