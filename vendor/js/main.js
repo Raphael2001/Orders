@@ -207,8 +207,6 @@ function switchEmptyState(isEmpty) {
   const elementsToToggle = [
     { id: "image-empty", showOnEmpty: true },
     { id: "btn_reset", showOnEmpty: true },
-    { id: "order-actions", showOnEmpty: false },
-    { id: "orderstable", showOnEmpty: false },
     { id: "btn_showmore", showOnEmpty: false },
   ];
 
@@ -220,6 +218,15 @@ function switchEmptyState(isEmpty) {
       element.classList.add("hide");
     }
   });
+
+  const orderActions = document.getElementById("order-actions");
+  if (orderActions) {
+    if (isEmpty) {
+      orderActions.classList.add("disabled");
+    } else {
+      orderActions.classList.remove("disabled");
+    }
+  }
 }
 
 function sortTable(n) {

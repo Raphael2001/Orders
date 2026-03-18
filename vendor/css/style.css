@@ -155,14 +155,13 @@ button.changedir:hover {
 }
 
 .image-empty {
-  margin-top: 70px;
+  display: block;
+  margin: 30px auto 0;
   width: 70%;
-  transform: translateX(-20%);
 }
 @media (max-width: 590px) {
   .image-empty {
     width: 100%;
-    transform: translateX(0%);
   }
 }
 
@@ -331,7 +330,9 @@ button.changedir:hover {
   margin-top: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+  box-shadow:
+    0 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
   position: relative;
   text-align: center;
@@ -413,20 +414,44 @@ button.changedir:hover {
   flex-direction: column;
 }
 
+.orders-top-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
 .orders-actions {
   display: flex;
+  align-items: center;
   gap: 15px;
+}
+
+.orders-actions.disabled button {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .printed-switch {
   display: flex;
   align-items: center;
+  align-self: center;
   gap: 8px;
-  margin-top: 20px;
+}
+.printed-switch label {
+  margin: 0;
+}
+
+.orders-actions .btn {
+  margin-bottom: 0;
 }
 .printed-label {
   font-size: 20px;
   font-weight: 900;
+  margin: 0;
 }
 #orders {
   margin-top: 50px;
