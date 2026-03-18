@@ -240,7 +240,7 @@ select:invalid {
   border-radius: 55px;
   height: auto;
   width: 200px;
-  margin-top: 20px;
+
   border: none;
   padding: 10px;
   -webkit-appearance: none;
@@ -506,7 +506,8 @@ select:first-of-type {
   background-color: var(--color-secondary);
   border: none;
   border-radius: 55px;
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       to top,
       var(--color-primary) 2px,
       rgba(156, 39, 176, 0) 2px
@@ -520,7 +521,8 @@ select:first-of-type {
   border-color: rgba(14, 72, 55, 0.8);
   border-color: transparent;
 
-  box-shadow: 0 1px 1px rgba(229, 103, 23, 0.075) inset,
+  box-shadow:
+    0 1px 1px rgba(229, 103, 23, 0.075) inset,
     0 0 8px rgba(14, 72, 55, 0.6) !important;
   outline: 0 none;
 }

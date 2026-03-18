@@ -119,16 +119,13 @@
 
 
 
-                                <div>
-                                    <img class="image-empty hide" id="image-empty" src="img/empty.svg" alt="אין תוצאות">
-
-                                </div>
-
-                                <section id="orders">
-
-
-                                    <div class="orders-actions" id="order-actions">
-
+                                <div class="orders-top-bar">
+                                    <div class="printed-switch">
+                                        <label class="printed-label">הודפס</label>
+                                        <input class="switch" type="checkbox" id="printed-switch" /><label
+                                            for="printed-switch"></label>
+                                    </div>
+                                    <div class="orders-actions disabled" id="order-actions">
                                         <button class="btn btn-primary printorders" onclick="tableToExcel()">
                                             <i class='bx bxs-file-import'></i> הוצאה לאקסל
                                         </button>
@@ -138,12 +135,10 @@
                                             הדפסה</button>
                                         <button class="btn btn-primary btn_update" id="btn_update"><span
                                                 class='bx bx-cloud-upload'></span> עדכן רשומות</button>
-                                        <div class="printed-switch">
-                                            <label class="printed-label">הודפס</label>
-                                            <input class="switch" type="checkbox" id="printed-switch" /><label
-                                                for="printed-switch"></label>
-                                        </div>
                                     </div>
+                                </div>
+
+                                <section id="orders">
                                     <table class="orderstable" id="orderstable">
                                         <thead>
                                             <tr>
@@ -163,12 +158,9 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tbody"></tbody>
-
                                     </table>
 
-
-
-
+                                    <img class="image-empty hide" id="image-empty" src="img/empty.svg" alt="אין תוצאות">
 
                                     <div class="showmore">
                                         <button type="button" class="btn" id="btn_showmore">הצג
