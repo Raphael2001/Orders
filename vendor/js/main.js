@@ -220,10 +220,12 @@ function switchEmptyState(isEmpty) {
   });
 
   const orderActions = document.getElementById("order-actions");
-  if (isEmpty) {
-    orderActions.classList.add("disabled");
-  } else {
-    orderActions.classList.remove("disabled");
+  if (orderActions) {
+    if (isEmpty) {
+      orderActions.classList.add("disabled");
+    } else {
+      orderActions.classList.remove("disabled");
+    }
   }
 }
 
