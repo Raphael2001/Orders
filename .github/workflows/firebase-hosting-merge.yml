@@ -24,4 +24,11 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ steps.auth.outputs.access_token }}
           NODE_OPTIONS: --max-old-space-size=4096
-        run: npx firebase-tools@latest deploy --only hosting --project orders-1f4fb
+        run: |
+          output=$(npx firebase-tools@latest deploy --only hosting --project orders-1f4fb 2>&1)
+          echo "$output"
+          if echo "$output" | grep -q "current active version"; then
+            echo "Content unchanged - already live, skipping release"
+            exit 0
+          fi
+          echo "$output" | grep -q "Error:" && exit 1 || exit 0
