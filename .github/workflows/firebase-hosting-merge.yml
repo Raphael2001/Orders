@@ -18,10 +18,7 @@ jobs:
         with:
           workload_identity_provider: 'projects/549327547136/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           service_account: 'github-action-627878624@orders-1f4fb.iam.gserviceaccount.com'
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Deploy to Firebase Hosting
         env:
           NODE_OPTIONS: --max-old-space-size=4096
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          channelId: live
-          projectId: orders-1f4fb
+        run: npx firebase-tools@latest deploy --only hosting --project orders-1f4fb
