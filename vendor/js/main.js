@@ -1,4 +1,4 @@
-const INACTIVE_USER_TIME_THRESHOLD = 6000000; // 60 min - a.k.a 1 hour
+const INACTIVE_USER_TIME_THRESHOLD = 43200000; // 12 hours
 const USER_ACTIVITY_THROTTLER_TIME = 60000;
 const BASE = "https://api-shipping360.aboohi.net/api/v1";
 // const BASE = "http://127.0.0.1:8080/api/v1";
